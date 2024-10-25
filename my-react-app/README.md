@@ -10,12 +10,17 @@ pipeline {
             }
         }
 
+        stage('List Workspace') {
+            steps {
+                sh 'ls -R'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
-                    dir('frontendcicd/master/my-react-app') {
-                        sh 'docker build -t akulasathish1997/react-deploy .'
-                    }
+                    // Build the Docker image using the correct Dockerfile path
+                    sh 'docker build -t akulasathish1997/react-deploy -f my-react-app/Dockerfile my-react-app'
                 }
             }
         }
