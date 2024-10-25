@@ -1,22 +1,21 @@
-/////////////////this is sample jenkins pipeline script/////////
-
-
 pipeline {
     agent any
 
     stages {
         stage('Clone Repository') {
             steps {
-                git url: 'https://github.com/your-username/my-react-app.git',
-                    credentialsId: '3d0cda11-15ad-4126-b6f5-8677e4df4670', // GitHub credentials
-                    branch: 'main'
+                git url: 'https://github.com/akulasathish/fronendCICD.git',
+                    credentialsId: 'git-hub-credentials', // GitHub credentials
+                    branch: 'master'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t akulasathish1997/react-deploy .'
+                    dir('frontendcicd/master/my-react-app') {
+                        sh 'docker build -t akulasathish1997/react-deploy .'
+                    }
                 }
             }
         }
@@ -25,7 +24,7 @@ pipeline {
             steps {
                 script {
                     // Log in to Docker Hub
-                    withCredentials([usernamePassword(credentialsId: '3d0cda11-15ad-4126-b6f5-8677e4df4670', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_TOKEN')]) {
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_TOKEN')]) {
                         sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_TOKEN'
                         sh 'docker push akulasathish1997/react-deploy'
                     }
@@ -47,7 +46,6 @@ pipeline {
                     '''
 
                     // Run the new container
-                    sh 'docker pull akulasathish1997/react-deploy'
                     sh 'docker run -d -p 80:80 akulasathish1997/react-deploy'
                 }
             }
