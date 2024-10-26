@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-app-deployment
+spec:
+  replicas: 2  # Number of replicas
+  selector:
+    matchLabels:
+      app: react-app
+  template:
+    metadata:
+      labels:
+        app: react-app
+    spec:
+      containers:
+      - name: react-app
+        image: akulasathish1997/react-deploy:latest  # Your Docker image
+        ports:
+        - containerPort: 80  # Port your app is listening on
+        env:
+        - name: ENV_VAR_NAME  # Example environment variable
+          value: "value"
