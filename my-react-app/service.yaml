@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-app-service
+spec:
+  type: LoadBalancer  # Type of service (adjust as needed)
+  ports:
+    - port: 80  # Port on which the service will be exposed
+      targetPort: 80  # Port on which your app is running
+  selector:
+    app: react-app  # Must match the labels in your deployment.yaml
